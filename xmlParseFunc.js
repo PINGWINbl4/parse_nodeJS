@@ -1,4 +1,4 @@
-//=========================GET_FUNCS==========================\\
+//=========================GET_FUNCS====================\\
 const {downloadFile} = require("./utils/download")
 const {unziping} = require("./utils/unzip")
 const {parseXML} = require("./utils/parse")
