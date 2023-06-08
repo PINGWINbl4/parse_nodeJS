@@ -1,33 +1,39 @@
 const fs = require('fs');
-const { writeFile } = require('fs/promises');
 const xml2js = require('xml2js');
 
-async function parseXML(unzippedFiles){
-    //console.log(unzippedFiles)
+async function parseXML(unzippedFileName){
+    var list
     var parser = new xml2js.Parser();
-    var neededData = []
-
-    fs.readFile('./storage/'+unzippedFiles, 'utf8', (err, data) => {
+    fs.readFile('./storage/'+unzippedFileName, 'utf-8', (err, data) => {
         
         if (err) {
           console.error(err);
           return;
         }
 
-        parser.parseString(data, function(err, result){
-            const list = result["ED807"]["BICDirectoryEntry"]
+        parser.parseString(data, async (err, result)=>{
+            list = result.ED807.BICDirectoryEntry
             for(let elementIndex in list){
-                const element = result["ED807"]["BICDirectoryEntry"][elementIndex]
-                
-                if(element["Accounts"] == undefined) delete element
-            } 
 
-            console.dir(result['ED807']['BICDirectoryEntry']);
-            return result['ED807']['BICDirectoryEntry']
-        });
-})
+                if(list[elementIndex].Accounts == undefined) {
+                    delete list[elementIndex]
+                }
+                else{
+
+                    list[elementIndex] = {
+                        'bic': list[elementIndex].$.BIC,
+                        'name': list[elementIndex].ParticipantInfo[0].$.NameP,
+                        'corrAccount': list[elementIndex].Accounts[0].$.Account
+                    }
+                }
+            }
+        });        
+        console.log(list)
+    })
 }
 
 module.exports = {
     parseXML
 }
+
+//console.log(parseXML())
