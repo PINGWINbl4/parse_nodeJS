@@ -10,7 +10,7 @@ const link = "http://www.cbr.ru/s/newbik"
 async function getBICList(link, fileName){
     await downloadFile(link, fileName)
     let unzippedFileName = await unziping(fileName)
-    return console.dir(await parseXML(unzippedFileName))
+    return await parseXML(unzippedFileName)
  
 }
-getBICList(link, fileName) 
+getBICList(link, fileName)
