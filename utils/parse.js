@@ -3,7 +3,7 @@ const xml2js = require('xml2js');
 
 async function parseXML(unzippedFileName){
     const parser = new xml2js.Parser();
-    const file = await fs.promises.readFile('./storage/' + unzippedFileName)
+    const file = await fs.promises.readFile(unzippedFileName)
     const parsedContent = await parser.parseStringPromise(file);
     const list = parsedContent.ED807.BICDirectoryEntry;
     const currentBICList = []
